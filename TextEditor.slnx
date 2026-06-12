@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Markdown/Markdown.csproj" />
+  <Project Path="TextEditor/TextEditor.csproj" />
+</Solution>
