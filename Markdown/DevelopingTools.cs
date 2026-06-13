@@ -1,5 +1,9 @@
 ﻿#if DEBUG
+#pragma warning disable IDE0079 // Remove unnecessary suppression. This is used to disable the warning for the entire file.
+#pragma warning disable IDE0005 // Using directive is unnecessary. Remove unnecessary usings.
 global using static Markdown.DevelopingTools;
+#pragma warning restore IDE0005 // Using directive is unnecessary. Remove unnecessary usings.
+#pragma warning restore IDE0079 // Remove unnecessary suppression. This is used to disable the warning for the entire file.
 
 namespace Markdown;
 

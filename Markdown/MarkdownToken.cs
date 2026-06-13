@@ -17,8 +17,8 @@ public enum MarkdownTokenKind
     Tilde = '~',
     Question = '?',
 
-    Splash = '/',
-    BackSplash = '\\',
+    Slash = '/',
+    Backslash = '\\',
 
     LeftBracket = '[',
     RightBracket = ']',
@@ -30,7 +30,7 @@ public enum MarkdownTokenKind
     Exclamation = '!',
     At = '@',
     Dollar = '$',
-    Precent = '%',
+    Percent = '%',
     Caret = '^',
     Ampersand = '&',
     Equal = '=',
@@ -40,7 +40,7 @@ public enum MarkdownTokenKind
     SingleQuote = '\'',
 
     Semicolon = ';',
-    Clolon = ':',
+    Colon = ':',
     Dot = '.',
     Comma = ',',
 
@@ -54,7 +54,7 @@ public enum MarkdownTokenKind
 }
 
 [DebuggerDisplay("{ToString(),nq}")]
-public record class MarkdownToken(MarkdownTokenKind Kind, string Value)
+public abstract record class MarkdownToken(MarkdownTokenKind Kind, string Value)
 {
     public override string ToString() =>
         $"<{Kind}: \"{Value.TransCode}\">";
@@ -62,14 +62,16 @@ public record class MarkdownToken(MarkdownTokenKind Kind, string Value)
     public bool Is(MarkdownTokenKind kind) =>
         Kind == kind;
 
+    public virtual bool Is(char character) => false;
+
     [DebuggerDisplay("{ToString(),nq}")]
-    public record class RepeatedToken(char Character, int Count)
+    public sealed record class RepeatedToken(char Character, int Count)
         : MarkdownToken((MarkdownTokenKind)Character, new(Character, Count))
     {
         public override string ToString() =>
             $"<{Kind}: {Count}>";
 
-        public bool Is(char character) =>
+        public override bool Is(char character) =>
             Character == character;
     }
 
@@ -94,8 +96,8 @@ public record class MarkdownToken(MarkdownTokenKind Kind, string Value)
     public static RepeatedToken Tilde(int count = 1) => new('~', count);
     public static RepeatedToken Question(int count = 1) => new('?', count);
 
-    public static RepeatedToken Splash(int count = 1) => new('/', count);
-    public static RepeatedToken BackSplash(int count = 1) => new('\\', count);
+    public static RepeatedToken Slash(int count = 1) => new('/', count);
+    public static RepeatedToken Backslash(int count = 1) => new('\\', count);
 
     public static RepeatedToken LeftBracket(int count = 1) => new('[', count);
     public static RepeatedToken RightBracket(int count = 1) => new(']', count);
@@ -107,7 +109,7 @@ public record class MarkdownToken(MarkdownTokenKind Kind, string Value)
     public static RepeatedToken Exclamation(int count = 1) => new('!', count);
     public static RepeatedToken At(int count = 1) => new('@', count);
     public static RepeatedToken Dollar(int count = 1) => new('$', count);
-    public static RepeatedToken Precent(int count = 1) => new('%', count);
+    public static RepeatedToken Percent(int count = 1) => new('%', count);
     public static RepeatedToken Caret(int count = 1) => new('^', count);
     public static RepeatedToken Ampersand(int count = 1) => new('&', count);
     public static RepeatedToken Equal(int count = 1) => new('=', count);
@@ -117,7 +119,7 @@ public record class MarkdownToken(MarkdownTokenKind Kind, string Value)
     public static RepeatedToken SingleQuote(int count = 1) => new('\'', count);
 
     public static RepeatedToken Semicolon(int count = 1) => new(';', count);
-    public static RepeatedToken Clolon(int count = 1) => new(':', count);
+    public static RepeatedToken Colon(int count = 1) => new(':', count);
     public static RepeatedToken Dot(int count = 1) => new('.', count);
     public static RepeatedToken Comma(int count = 1) => new(',', count);
 
@@ -127,5 +129,5 @@ public record class MarkdownToken(MarkdownTokenKind Kind, string Value)
     public static RepeatedToken Dash(int count = 1) => new('-', count);
     public static RepeatedToken Plus(int count = 1) => new('+', count);
 
-    public static readonly EndOfFileToken EndOfFile = new();
+    public static EndOfFileToken EndOfFile { get; } = new();
 }
